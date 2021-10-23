@@ -19,8 +19,9 @@ const GameBoard = () => {
     bottomRight: "",
   });
   const [history, setHistory] = useState([]);
+
   useEffect(() => {
-    setHistory([...history, { ...gameBoardState }]);
+    setHistory((history) => [...history, { ...gameBoardState }]);
   }, [gameBoardState]);
 
   const winVarietyArray = [
