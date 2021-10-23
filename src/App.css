@@ -2,6 +2,10 @@
     box-sizing: border-box;
 }
 
+body::-webkit-scrollbar {
+    display: none;
+}
+
 .App {
     text-align: center;
     background-color: #282c34;
@@ -12,18 +16,29 @@
     justify-content: center;
     font-size: calc(10px + 2vmin);
     color: white;
+    padding: 5vmin;
 }
 
 .tile {
     width: 20vmin;
     height: 20vmin;
-    border: white 0.5vmin solid;
+    border: white 0.4vmin solid;
     font-size: 15vmin;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     cursor: pointer;
+    text-shadow: black 0.4vmin 0.4vmin;
+}
+
+.tile:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10%;
+}
+
+.tile:active {
+    transform: scale(0.98);
 }
 
 .flex {
@@ -95,4 +110,8 @@ input:hover {
 
 input:active {
     transform: scale(0.98);
+}
+
+p {
+    text-shadow: black 0.3vmin 0.25vmin;
 }

@@ -3,9 +3,8 @@ import GameTile from "./game_tile";
 
 //======{GameBoard} component======//
 const GameBoard = () => {
-  //===The [gameBoardState] is an array that contains an object that each property it contains represents the value of a tile(text content of each of the 9 divs)===//
+  //===The [gameBoardState] state is an object that each property it contains represents the value of a tile(text content of each of the 9 divs) but the first 2 which contain which players turn it is and a boolian for if the game is over===//
   const [gameBoardState, setGameBoardState] = useState({
-    // history: [],
     playerTurn: "x",
     gameIsOver: false,
     topLeft: "",
@@ -18,12 +17,14 @@ const GameBoard = () => {
     bottomMiddle: "",
     bottomRight: "",
   });
+  //===The [history] state is an empty array that will contain each [gameBoardState] and will serve as our time line===//
   const [history, setHistory] = useState([]);
-
+  //===useEffect is used to bypass the render on setGameBoardState and set the historyState===//
   useEffect(() => {
-    setHistory((history) => [...history, { ...gameBoardState }]);
+    setHistory([...history, { ...gameBoardState }]);
+    // eslint-disable-next-line
   }, [gameBoardState]);
-
+  //====[winVarietyArray] is an array that contains all possiable winnig combinations(arrays of 3 tiles) that will later serve us in a check for a winner (checkForWinner())
   const winVarietyArray = [
     [gameBoardState.topLeft, gameBoardState.topMiddle, gameBoardState.topRight],
     [
@@ -62,33 +63,27 @@ const GameBoard = () => {
       gameBoardState.topRight,
     ],
   ];
-
   //===The {mainTileFunction()} is the main function() and it is called with each <tile> click and its passed the event that calld on it===//
   const mainTileFunction = (e) => {
+    //===if the game is over exit the function===//
     if (gameBoardState.gameIsOver) return;
-    // console.log("gameBoardState", gameBoardState);
-    // console.log("e.target.id", e.target.id);
-    // console.log("gameBoardState[e.target.id]", gameBoardState[e.target.id]);
-    //===The [newGameBoardStateArray] array will push each new state and will act as our time line===//
     //===This (if) will check if the event tile's id equals an empty string===//
     if (gameBoardState[e.target.id] === "") {
-      //===if so it will assign the [playerTurn]property value to it and change the [playerTurn]property value (btween x-o)===//
-
+      //===if so it will assign the [playerTurn]property value to it and change the [playerTurn]property value (btween x-o) and will trigger the useEffect()===//
       setGameBoardState({
         ...gameBoardState,
-        // history: [{ ...gameBoardState }],
         [e.target.id]: gameBoardState.playerTurn,
         playerTurn: gameBoardState.playerTurn === "x" ? "o" : "x",
       });
-
-      // console.log("turn.", gameBoardState.playerTurn);
     }
   };
+  //===this function() will check for a winner and if so will return which player else it will state wich players turn it is or if its a draw===//
   const checkForWinner = () => {
+    //===if the game is over exit the function===//
     if (gameBoardState.gameIsOver) return;
+    //=== in this condition we loop over the  [winVarietyArray] and check if each of its inner arrays have all matching values that are not an empty string===//
     if (
       winVarietyArray.filter((winVariety) => {
-        // console.log("winVariety[0]");
         return (
           winVariety[0] === winVariety[1] &&
           winVariety[0] === winVariety[2] &&
@@ -96,33 +91,21 @@ const GameBoard = () => {
         );
       }).length > 0
     ) {
+      //===in case there is a winner set game over to true so it stops this function() and the mainTileFunction()===//
       setGameBoardState({ ...gameBoardState, gameIsOver: true });
-
-      // return gameBoardState.playerTurn === "x"
-      //   ? "Player O wins"
-      //   : "Player X wins";
     } else {
       return Object.values(gameBoardState).indexOf("") > -1
         ? "Player " + gameBoardState.playerTurn.toLocaleUpperCase() + "'s turn"
         : "It's a Draw";
     }
   };
-  // console.log("state.", gameBoardState);
-  // console.log("history", gameBoardState.history);
-  console.log("history", history);
-
   const timeTravel = (e) => {
-    console.log("history1", history);
-    console.log(e.target.getAttribute("data-step-number"));
     setGameBoardState({
       ...history[e.target.getAttribute("data-step-number")],
     });
-    let temp = [...history].splice(e.target.getAttribute("data-step-number"));
-    console.log("temp", temp);
     setHistory(
       [...history].slice(0, e.target.getAttribute("data-step-number"))
     );
-    console.log("history2", history);
   };
   return (
     <>
