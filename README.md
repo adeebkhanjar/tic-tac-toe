@@ -1,4 +1,4 @@
-#tic tac toe with react
+# tic tac toe with react
 We built a tic-tac-toe game with react hooks
 each player will take turns playing switching between "x"and"o" each turn
 thae tile clicked on will display the letter representing the player either 'x' or 'o'
